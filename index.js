@@ -12,6 +12,7 @@ mongoose.connect("mongodb://localhost:27017/buzzle");
 
 const Level = mongoose.model("Level", {
   pattern: Array,
+  name: String,
 });
 
 app.post("/test", async (req, res) => {
@@ -43,6 +44,7 @@ app.post("/edit", async (req, res) => {
   try {
     const newLevel = new Level({
       pattern: req.body.pattern,
+      name: req.body.name,
     });
     await newLevel.save();
     res.status(200).json({

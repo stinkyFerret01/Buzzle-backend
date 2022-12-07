@@ -6,28 +6,19 @@ app.use(express.json());
 app.use(cors());
 require("dotenv").config();
 
+///-- BDD --///
+//-- connexion
 const mongoose = require("mongoose");
 // mongoose.connect(process.env.DATABASE_URL);
 mongoose.connect("mongodb://localhost:27017/buzzle");
-
+//-- modèle de niveau
 const Level = mongoose.model("Level", {
   pattern: Array,
   name: String,
 });
 
-app.post("/test", async (req, res) => {
-  try {
-    console.log("ok");
-    console.log(req.body);
-    res.status(200).json({
-      message: "requête edit accordée",
-      level: newLevel,
-    });
-  } catch (error) {
-    res.status(400).json({ error: error.message });
-  }
-});
-
+///-- ROUTES --///
+//-- récupérer la liste des niveaux
 app.get("/levels", async (req, res) => {
   try {
     const levels = await Level.find();
@@ -40,6 +31,7 @@ app.get("/levels", async (req, res) => {
   }
 });
 
+//-- ajouter un niveau à la BDD
 app.post("/edit", async (req, res) => {
   try {
     const newLevel = new Level({
@@ -56,6 +48,7 @@ app.post("/edit", async (req, res) => {
   }
 });
 
+///-- PORT --///
 app.listen(3000, () => {
   console.log("Server has started");
 });

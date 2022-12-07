@@ -9,8 +9,8 @@ require("dotenv").config();
 ///-- BDD --///
 //-- connexion
 const mongoose = require("mongoose");
-// mongoose.connect(process.env.DATABASE_URL);
-mongoose.connect("mongodb://localhost:27017/buzzle");
+mongoose.connect(process.env.DATABASE_URL);
+// mongoose.connect("mongodb://localhost:27017/buzzle");
 //-- modèle de niveau
 const Level = mongoose.model("Level", {
   pattern: Array,

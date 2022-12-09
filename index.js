@@ -15,16 +15,19 @@ mongoose.connect(process.env.DATABASE_URL);
 const Level = mongoose.model("Level", {
   pattern: Array,
   name: String,
+  status: String,
 });
 
 ///-- ROUTES --///
 //-- récupérer la liste des niveaux
 app.get("/levels", async (req, res) => {
   try {
-    const levels = await Level.find();
+    const levelsValid = await Level.find({ status: "valid" });
+    const levelsNew = await Level.find({ status: "new" });
     res.status(200).json({
       message: "requête levels accordée",
-      levels: levels,
+      levelsValid: levelsValid,
+      levelsNew: levelsNew,
     });
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -37,6 +40,7 @@ app.post("/edit", async (req, res) => {
     const newLevel = new Level({
       pattern: req.body.pattern,
       name: req.body.name,
+      status: req.body.status,
     });
     await newLevel.save();
     res.status(200).json({

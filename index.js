@@ -39,8 +39,8 @@ app.get("/levels", async (req, res) => {
 //-- ajouter un niveau à la BDD
 app.post("/edit", async (req, res) => {
   try {
-    const sameName = Level.findOne({ name: req.body.name });
-    if (sameName === null) {
+    const same = await Level.findOne({ name: req.body.name });
+    if (same === null) {
       const newLevel = new Level({
         pattern: req.body.pattern,
         name: req.body.name,

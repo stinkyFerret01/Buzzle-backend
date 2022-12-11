@@ -24,10 +24,12 @@ app.get("/levels", async (req, res) => {
   try {
     const levelsValid = await Level.find({ status: "valid" });
     const levelsNew = await Level.find({ status: "new" });
+    const levels = await Level.find();
     res.status(200).json({
       message: "requête levels accordée",
       levelsValid: levelsValid,
       levelsNew: levelsNew,
+      levels: levels,
     });
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -37,16 +39,23 @@ app.get("/levels", async (req, res) => {
 //-- ajouter un niveau à la BDD
 app.post("/edit", async (req, res) => {
   try {
-    const newLevel = new Level({
-      pattern: req.body.pattern,
-      name: req.body.name,
-      status: req.body.status,
-    });
-    await newLevel.save();
-    res.status(200).json({
-      message: "requête edit accordée",
-      level: newLevel,
-    });
+    const sameName = Level.findOne({ name: req.body.name });
+    if (sameName === null) {
+      const newLevel = new Level({
+        pattern: req.body.pattern,
+        name: req.body.name,
+        status: req.body.status,
+      });
+      await newLevel.save();
+      res.status(200).json({
+        message: "votre niveau a été édité!",
+        level: newLevel,
+      });
+    } else {
+      res.status(200).json({
+        message: "ce nom est déja utilisé!",
+      });
+    }
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

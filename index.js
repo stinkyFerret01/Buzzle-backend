@@ -16,6 +16,7 @@ const Level = mongoose.model("Level", {
   pattern: Array,
   name: String,
   status: String,
+  context: String,
 });
 
 ///-- ROUTES --///
@@ -44,7 +45,8 @@ app.post("/edit", async (req, res) => {
       const newLevel = new Level({
         pattern: req.body.pattern,
         name: req.body.name,
-        status: req.body.status,
+        status: "new",
+        context: req.body.context,
       });
       await newLevel.save();
       res.status(200).json({
